@@ -12,8 +12,18 @@
 // the quantity bought.
 // fn calculate_price_of_apples(???) -> ??? { ??? }
 
+use std::i64;
+
 fn main() {
     // You can optionally experiment here.
+}
+
+fn calculate_price_of_apples(num: i64) -> i64 {
+    if num <= 40 {
+        num * 2
+    } else {
+        num
+    }
 }
 
 // Don't change the tests!
