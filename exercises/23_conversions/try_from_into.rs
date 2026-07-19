@@ -23,27 +23,40 @@ enum IntoColorError {
     IntConversion,
 }
 
-// TODO: Tuple implementation.
+// Tuple implementation.
 // Correct RGB color values must be integers in the 0..=255 range.
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
 
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let (red, green, blue) = tuple;
+        Ok(Self {
+            red: u8::try_from(red).map_err(|_| IntoColorError::IntConversion)?,
+            green: u8::try_from(green).map_err(|_| IntoColorError::IntConversion)?,
+            blue: u8::try_from(blue).map_err(|_| IntoColorError::IntConversion)?,
+        })
+    }
 }
 
-// TODO: Array implementation.
+// Array implementation.
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let [red, green, blue] = arr;
+        Self::try_from((red, green, blue))
+    }
 }
 
-// TODO: Slice implementation.
+// Slice implementation.
 // This implementation needs to check the slice length.
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
 
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        let [red, green, blue] = <[i16; 3]>::try_from(slice).map_err(|_| IntoColorError::BadLen)?;
+        Self::try_from((red, green, blue))
+    }
 }
 
 fn main() {
